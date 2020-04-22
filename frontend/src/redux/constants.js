@@ -1,0 +1,5 @@
+export const SIGNED_IN = "SIGNED_IN"
+export const LOGIN = "LOGIN"
+export const LOGOUT = "LOGOUT"
+export const REGISTER = "REGISTER"
+export const UPDATE_IMAGE = "UPDATE_IMAGE"
