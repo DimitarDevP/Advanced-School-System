@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, UPDATE_IMAGE } from '../constants'
+import { LOGIN, LOGOUT, UPDATE_IMAGE, REGISTER } from '../constants'
 
 let currentUser = {
 	auth_key: '',
@@ -27,9 +27,14 @@ let currentUser = {
 export const userReducer = (state = currentUser, action) => {
 	switch (action.type) {
 		case LOGIN:
-			const response = action.payload
 			return {
-				...currentUser, ...response
+				...currentUser, ...action.payload
+			}
+		case REGISTER:
+			const response = action.payload
+			return { 
+				...currentUser,
+				...response 
 			}
 		case LOGOUT:
 			return {
@@ -56,9 +61,16 @@ export const userReducer = (state = currentUser, action) => {
 				}
 			}
 		case UPDATE_IMAGE:
-			return {
-				...currentUser, ...action.payload
+			const data = action.payload
+			const newState = {
+				...state,
+				...data.response,
+				user: {
+					...state.user,
+					profile_picture: data.profile_picture
+				}
 			}
+			return newState
 		default:
 			return state
 	}

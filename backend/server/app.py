@@ -1,7 +1,11 @@
 # Thirdparty
-from flask import Flask, session
+from flask import Flask, send_from_directory
 from flask import request
 from datetime import timedelta
+from flask_cors import *
+from flask_jwt_extended import create_access_token
+import jwt
+import pprint
 
 # Application
 from connect import app
@@ -19,15 +23,13 @@ classes = Classes()
 grades = Grades()
 assignments = Assignments()
 
-
-@app.before_request
-def before_request():
-    session.permanent = True
-    app.permanent_session_lifetime = timedelta(minutes=8*60)
-
 @app.route('/api/user/login', methods=['POST'])
 def login():
     return user.login(request)
+
+@app.route('/public/user/profile/<path:filename>', methods=['GET'])
+def test(filename):
+    return send_from_directory("./public/profile_pictures/", filename, as_attachment=True)
 
 @app.route('/api/user/logout', methods=['POST'])
 def logout():
@@ -85,6 +87,10 @@ def get_enrolled_subjects():
 def get_class():
     return classes.get_class(request)
 
+@app.route("/api/classes/get_homeroom_classes", methods=["POST"])
+def get_homeroom_classes():
+    return classes.get_homeroom_classes(request)
+
 @app.route("/api/classes/create_class", methods=["POST"])
 def create_class():
     return classes.create_class(request)
@@ -121,17 +127,5 @@ def get_assignments():
 def add_submission():
     return assignments.add_submission(request)
 
-
-app.run(debug=True)
-
-
-
-
-# SLECTING:
-#   """SELECT * FROM users WHERE user_name=%s OR user_id=%s""", ("Admin",'2')
-# INSERTING:
-#   """INSERT INTO users (user_name, user_password) VALUES (%s, %s)""", ("new_user", "new_password")
-# UPDATING:
-#   """UPDATE users SET user_password = %s WHERE user_id = %s""", ("new_password", 5)
-# DELETING:
-#   """DELETE FROM users WHERE user_id = %s""", (5)
+if __name__ == "__main__":
+      app.run(debug=True)

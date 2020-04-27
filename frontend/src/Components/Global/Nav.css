@@ -8,8 +8,9 @@
 
 #Nav > img {
     width: 150px;
-    border: 10px solid #FFF;
-    margin: 70px 45px 25px 45px;
+    border: 6px solid #FFF;
+    max-height: 150px;
+    margin: 70px 48px 25px 48px;
     border-radius: 50%;
 }
 
@@ -32,7 +33,7 @@
 }
 
 #NavItems > a {
-    font-weight: 100;
+    font-weight: 400;
     padding: 30px 10px;
     transition: ease-in-out 100ms;
     color: #FFF;

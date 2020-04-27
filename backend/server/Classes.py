@@ -1,6 +1,8 @@
 # Thirdparty 
 from flask import Flask, session, jsonify, request
-import time    
+import time
+import datetime
+import jwt
 
 # Application
 from connect import *
@@ -18,8 +20,8 @@ class Classes:
 
         data = request.params
 
-        class_id = fsql.read("""SELECT * FROM classes WHERE grade = %s AND class = %s""", (data["grade"], data["class"]), 0)["class_id"]
-        students = fsql.read("""SELECT * FROM enrolled_classes WHERE class_id = %s""", (str(class_id)))
+        _class = fsql.read("""SELECT * FROM classes WHERE grade = %s AND class = %s""", (data["class_id"], ), 0)
+        students = fsql.read("""SELECT * FROM enrolled_classes WHERE class_id = %s""", (str(_class["class_id"])))
         
         students_array = list()
         
@@ -29,7 +31,25 @@ class Classes:
         
 
         return jsonify({
+            "class": _class,
             "students" : students_array,
+            "error_code" : "200",
+            "error_message" : "Success"
+        })
+
+    def get_homeroom_classes(self, request):
+        if not request.method == 'POST':
+            return jsonify({
+                "error_message" : "Bad request.",
+                "error_code" : "400"
+            })
+
+        data = request.params
+
+        _classes = fsql.read("""SELECT * FROM classes WHERE professor_id = %s""", (data["user_id"], ))        
+
+        return jsonify({
+            "classes": _classes,
             "error_code" : "200",
             "error_message" : "Success"
         })
@@ -42,14 +62,12 @@ class Classes:
             })
         
         data = request.params
-        user = data['user']
-        _class = data["class"]
 
-        if user["user_role"] != "Professor":
-            return jsonify({
-                "error_message" : "Access Denied. Unauthorized user",
-                "error_code" : "403"
-            })
+        # if user["user_role"] != "Professor":
+        #     return jsonify({
+        #         "error_message" : "Access Denied. Unauthorized user",
+        #         "error_code" : "403"
+        #     })
         
         if not self.auth_user(data['auth_key']):
             return jsonify({
@@ -58,9 +76,12 @@ class Classes:
             })
         
 
-        fsql.create("""INSERT INTO classes (professor_id, grade, class, _year) VALUES (%s, %s, %s, %s)""", (user["user_id"], _class["grade"], _class["class"], _class["year"]))
+        fsql.create("""INSERT INTO classes (professor_id, grade, class, _year) VALUES (%s, %s, %s, %s)""", (data["user_id"], data["grade"], data["class"], data["year"]))
+
+        createdClass = fsql.read("""SELECT * FROM classes WHERE professor_id = %s AND grade = %s AND class = %s  ANd _year = %s""", (data["user_id"], data["grade"], data["class"], data["year"]), 0)
 
         return jsonify({
+            "currentUserClass" : currentClass,
             "error_code" : "200",
             "error_message" : "Success"
         })
@@ -99,10 +120,13 @@ class Classes:
 
 
     def auth_user(self, auth_key):
-        for key in session.keys():
-            if session[key] == auth_key:
-                return True
-            else:
-                continue
-
-        return False
+        try:
+            beginning = auth_key[:0]
+            ending = auth_key[2:]
+            auth_key = beginning + ending
+            auth_key = auth_key[:len(auth_key) - 1]
+            jwt.decode(auth_key, "randKey")
+            print(auth_key)
+            return False
+        except:
+            return True

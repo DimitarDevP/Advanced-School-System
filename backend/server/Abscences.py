@@ -1,5 +1,8 @@
 from flask import Flask, session, jsonify, request
+import datetime
+import jwt
 import time
+
 
 from connect import *
 
@@ -201,10 +204,13 @@ class Abscences:
 
 
     def auth_user(self, auth_key):
-        for key in session.keys():
-            if session[key] == auth_key:
-                return True
-            else:
-                continue
-
-        return False
+        try:
+            beginning = auth_key[:0]
+            ending = auth_key[2:]
+            auth_key = beginning + ending
+            auth_key = auth_key[:len(auth_key) - 1]
+            jwt.decode(auth_key, "randKey")
+            print(auth_key)
+            return False
+        except:
+            return True

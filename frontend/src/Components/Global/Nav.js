@@ -15,29 +15,22 @@ function ProfessorNav(props) {
         display = {}
 
     const handleLogout = () => {
-        console.log(props.currentUser.auth_key)
-        props.logout(props.currentUser.auth_key)
+        props.logout()
     }
 
     return (
         <div id="Nav" style={display}>
-            <img src="https://www.pngitem.com/pimgs/m/22-223968_default-profile-picture-circle-hd-png-download.png" />
+            <img src={"http://localhost:5000/public/user/profile/"+props.currentUser.user.profile_picture} />
             <h3>{props.currentUser.user.firstname + " " + props.currentUser.user.lastname}</h3>
-            {props.currentUser.user.user_role === "Professor" ? (<div id="NavItems">
-            <NavLink to="/home/">HOME</NavLink>
-            <NavLink to={"/user/"+props.currentUser.user.user_id}>PROFILE</NavLink>
-            <NavLink to={"/openedAssignments/"+props.currentUser.user.user_id}>ASSIGNMENTS</NavLink>
-            <NavLink to={"/openedSubjects/"+props.currentUser.user.user_id}>SUBJECTS</NavLink>
-            <NavLink to={"/homeroom/"+props.currentUser.user.user_id}>HOMEROOM</NavLink>
-            <NavLink onClick={handleLogout} to={"/"}>LOGOUT</NavLink>
-        </div>) : (<div id="NavItems">
-            <NavLink to="/home/">HOME</NavLink>
-            <NavLink to={"/user/"+props.currentUser.user.user_id}>PROFILE</NavLink>
-            <NavLink to={"/submittedAssignments/"+props.currentUser.user.user_id}>ASSIGNMENTS</NavLink>
-            <NavLink to={"/enrolledSubjects/"+props.currentUser.user.user_id}>SUBJECTS</NavLink>
-            <NavLink to={"/abscences/"+props.currentUser.user.user_id}>ABSCENCES</NavLink>
-            <NavLink onClick={handleLogout} to={"/"}>LOGOUT</NavLink>
-        </div>)}
+            <div id="NavItems">
+                <NavLink to="/home/">HOME</NavLink>
+                <NavLink to={"/user/"+props.currentUser.user.user_id}>PROFILE</NavLink>
+                <NavLink to={"/assignments/"}>ASSIGNMENTS</NavLink>
+                <NavLink to={"/subjects/"}>SUBJECTS</NavLink>
+                <NavLink to={"/homeroom/"}>CLASSES</NavLink>
+                <NavLink onClick={handleLogout} to={"/"}>LOGOUT</NavLink>
+            </div>
+
         <div id="toggle">
             <div></div>
             <div></div>
@@ -55,7 +48,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        logout: (auth_key) => dispatch(logout(auth_key))
+        logout: () => dispatch(logout())
     }
 }
 

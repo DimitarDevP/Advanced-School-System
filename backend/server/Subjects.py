@@ -1,5 +1,7 @@
 from flask import Flask, session, jsonify, request
 import time
+import datetime
+import jwt
 
 from connect import *
 
@@ -46,6 +48,29 @@ class Subjects:
             "error_message" : "Success"
         })
 
+
+    def get_subject_classes(self, request):
+        if not request.method == 'POST':
+            return jsonify({
+                "error_message" : "Bad request.",
+                "error_code" : "400"
+            })
+
+        data = request.params
+
+        enrolls = fsql.read("""SELECT * FROM enrolled_subjects WHERE subject_id = %s""", (data["subject_id"], ))
+        student_classes = []
+        for enroll in enrolls:
+            student_class = fsql.read("""SELECT * FROM enrolled_classes WHERE student_id = %s""", (enroll, ), 0)
+            student_classes.append(student_class)
+
+        classes = []
+        for class_id in student_classes:
+            if not class_id["class_id"] in classes_ids:
+                _class = {
+                    "class": fsql.read("""SELECT* FROM classes WHERE class_id = %s""", (class_id["class_id"], ), 0),
+                }
+                classes.append(_class)
 
     
     def enroll_subject(self, request):
@@ -135,8 +160,13 @@ class Subjects:
 
 
     def auth_user(self, auth_key):
-        for key in session.keys():
-            if session[key] == auth_key:
-                return True
-        
-        return False
+        try:
+            beginning = auth_key[:0]
+            ending = auth_key[2:]
+            auth_key = beginning + ending
+            auth_key = auth_key[:len(auth_key) - 1]
+            jwt.decode(auth_key, "randKey")
+            print(auth_key)
+            return False
+        except:
+            return True

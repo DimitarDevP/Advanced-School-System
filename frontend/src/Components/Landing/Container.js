@@ -10,7 +10,7 @@ export default class Container extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            loginSelected: false
+            loginSelected: true
         }
     }
 
@@ -31,8 +31,8 @@ export default class Container extends React.Component {
         return (
             <div id="Container">
                 <div id="selector">
-                    <h3 onClick={() => this.toggleView("login")}>Login</h3>
-                    <h3 onClick={() => this.toggleView("register")} className="selected">Register</h3>
+                    <h3 onClick={() => this.toggleView("login")} className="selected">Login</h3>
+                    <h3 onClick={() => this.toggleView("register")}>Register</h3>
                 </div>
                 {this.state.loginSelected ? <Login /> : <Register />}
 
