@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, UPDATE_IMAGE, REGISTER } from '../constants'
+import { LOGIN, LOGOUT, UPDATE_IMAGE, REGISTER, GET_ALL_USERS } from '../constants'
 
 let currentUser = {
 	auth_key: '',
@@ -21,7 +21,8 @@ let currentUser = {
 		user_id: 0,
 		user_role: '',
 		verified: 0
-	}
+	},
+	Users: []
 }
 
 export const userReducer = (state = currentUser, action) => {
@@ -71,6 +72,12 @@ export const userReducer = (state = currentUser, action) => {
 				}
 			}
 			return newState
+
+		case GET_ALL_USERS:
+			return {
+				...state,
+				Users: action.payload.users
+			}
 		default:
 			return state
 	}

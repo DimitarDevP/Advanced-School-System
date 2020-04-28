@@ -59,18 +59,19 @@ class Subjects:
         data = request.params
 
         enrolls = fsql.read("""SELECT * FROM enrolled_subjects WHERE subject_id = %s""", (data["subject_id"], ))
-        student_classes = []
+        student_classes = list()
+
         for enroll in enrolls:
-            student_class = fsql.read("""SELECT * FROM enrolled_classes WHERE student_id = %s""", (enroll, ), 0)
+            student_class = fsql.read("""SELECT * FROM enrolled_classes WHERE student_id = %s""", (enroll["student_id"], ), 0)
             student_classes.append(student_class)
 
         classes = []
         for class_id in student_classes:
-            if not class_id["class_id"] in classes_ids:
-                _class = {
-                    "class": fsql.read("""SELECT* FROM classes WHERE class_id = %s""", (class_id["class_id"], ), 0),
-                }
+            _class = fsql.read("""SELECT* FROM classes WHERE class_id = %s""", (class_id["class_id"], ), 0)
+            if not _class in classes:
                 classes.append(_class)
+
+        return jsonify({"classes" : classes})
 
     
     def enroll_subject(self, request):

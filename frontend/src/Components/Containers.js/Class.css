@@ -1,0 +1,15 @@
+#ClassContainer {
+    min-height: calc(100vh - 180px);
+    background: #1A1E29;
+    padding: 90px 150px;
+}
+
+
+#ClassContainer  > h2 {
+    color: #FFF;
+    margin-bottom: 40px;
+}
+
+#studentsContainer {
+    display: flex;
+}

@@ -52,12 +52,15 @@ class Abscences:
         # Expected input - JSON object POST request
         #
         # {
-        #   "firstname":
-        #   "lastname":
-        #   "description":
-        #   "period":
-        #   "user_id":
-        #   "auth_key":
+        #   "abscence": {
+        #      "description":
+        #      "period":
+        #      "user_id":
+        #   },
+        #   "user" : {
+        #       "user_id"
+        #       "auth_key":
+        #   }
         # }
 
 
@@ -69,8 +72,7 @@ class Abscences:
 
         data = request.params
 
-        student = fsql.read("""SELECT * FROM users WHERE firstname = %s AND lastname = %s""", (data['firstname'], data['lastname']), 0)
-        professor = fsql.read("""SELECT * FROM users WHERE user_id = %s""", (str(data["user_id"])), 0)
+        professor = fsql.read("""SELECT * FROM users WHERE user_id = %s""", (str(data["user"]["user_id"], )), 0)
 
         if not professor['user_role'] == "Professor":
             return jsonify({
@@ -78,22 +80,16 @@ class Abscences:
                 "error_code" : "403"
             })
 
-        if not self.auth_user(data['auth_key']):
+        if not self.auth_user(data["user"]['auth_key']):
             return jsonify({
                 "error_message" : "Session Expired.",
                 "error_code" : "401"
             })
 
-        if not isinstance(student, dict):
-            return jsonify({
-                "error_message" : "Student not found in database",
-                "error_code" : "404"
-            })
-
         today = time.strftime('%Y-%d-%m')
 
         fsql.create("""INSERT INTO abscences (student_id, _status, _description, _date, _period) VALUES (%s, %s, %s, %s, %s)""",
-            (student['user_id'], "Pending", data["description"], today, data['period'])
+            (data["abscence"]['user_id'], "Prazno", data["abscence"]["_description"], today, data['abscence']['_period'])
         )
 
         return jsonify({
@@ -131,15 +127,17 @@ class Abscences:
                 "error_code" : "401"
             })
 
-        _class = fsql.read("""SELECT * FROM classes WHERE professor_id = %s""", (str(data['user_id'])), 0)["class_id"]
-        students = fsql.read("""SELECT * FROM enrolled_classes WHERE class_id = %s""", (str(_class)))
-        abscences = list()
+        # _class = fsql.read("""SELECT * FROM classes WHERE professor_id = %s""", (str(data['user_id'])), 0)["class_id"]
+        # students = fsql.read("""SELECT * FROM enrolled_classes WHERE class_id = %s""", (str(_class)))
+        # abscences = list()
 
-        for student in students:
-            student_abscnecnes = fsql.read("""SELECT * FROM abscences WHERE student_id = %s""", (str(student['student_id'])))
-            for abscence in student_abscnecnes:
-                abscences.append(abscence)
-
+        # for student in students:
+        #     student_abscnecnes = fsql.read("""SELECT * FROM abscences WHERE student_id = %s""", (str(student['student_id'])))
+        #     for abscence in student_abscnecnes:
+        #         abscences.append(abscence)
+        returned_abscences = list()
+        abscences = fsql.read("""SELECT * FROM abscences""", (), 1)
+    
         return jsonify({
             "abscences" : abscences,
             "error_code" : "200",
@@ -176,7 +174,7 @@ class Abscences:
         data = request.params
 
         professor = data['user']
-        abscence = data['abscence']
+        abscences = data['abscences']
 
         if not self.auth_user(professor['auth_key']):
             return jsonify({
@@ -185,7 +183,7 @@ class Abscences:
             })
 
         class_id = fsql.read("""SELECT * FROM classes WHERE professor_id = %s""", (str(professor['user_id'])), 0)["class_id"]
-        student = fsql.read("""SELECT * FROM enrolled_classes WHERE class_id = %s AND student_id = %s""", (class_id, abscence['student_id']), 0)
+        student = fsql.read("""SELECT * FROM enrolled_classes WHERE class_id = %s AND student_id = %s""", (class_id, abscences[0]['student_id']), 0)
 
         if not isinstance(student, dict):
             return jsonify({
@@ -193,11 +191,15 @@ class Abscences:
                 "error_code" : "404"
             })
             
-        fsql.update("""UPDATE abscences SET _status = %s, _description = %s WHERE absence_id = %s""", 
-        (abscence['status'], abscence['description'], abscence['absence_id'])
-        )
+        for abscence in abscences:
+            fsql.update("""UPDATE abscences SET _status = %s, _description = %s WHERE absence_id = %s""", 
+            (abscence['_status'], abscence['_description'], abscence['abscence_id'])
+            )
+        
+        abscences = fsql.read("""SELECT * FROM abscences""", ())
         
         return jsonify({
+            "abscences": abscences,
             "error_code" : "200",
             "error_message" : "Success"
         })
