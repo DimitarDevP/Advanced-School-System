@@ -4,6 +4,28 @@
     height: 100vh;
     background: #3B2B4F;
     position: fixed;
+    width: 350px;
+    transition: 300ms;
+}
+
+#Nav.hidden {
+    width: 0px;
+    padding: 0px;
+}
+#Nav > img.hidden,
+#Nav > h3.hidden,
+#Nav > #NavItems.hidden {
+    display: none;
+}
+
+.container.hidden {
+    margin-left: 0px !important;
+    transition: 300ms;
+}
+
+.container.showing {
+    margin-left: 350px !important;
+    transition: 300ms;
 }
 
 #Nav > img {
@@ -49,12 +71,18 @@
     position: absolute;
     width: 45px;
     height: 45px;
-    top: 10px;
-    left: 360px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     cursor: pointer;
+    top: 10px;
+    left: 360px;
+    transition: 300ms;
+}
+
+#toggle.hidden {
+    top: 10px;
+    left: 30px;
 }
 
 #toggle > div:nth-child(1) {
