@@ -1,0 +1,20 @@
+Professor Create Actions:
+    - Create class
+    - Create subject
+    - Add grade
+    - Add abscence
+    - Set Abscence Status
+    - Open assignment
+    - Close assignment
+    - Update Profile
+
+Professor Read Actions:
+    - Read My Assignments
+    - Read My Students
+    - Read My Homeroom Class
+
+Student Create Actions:
+    - Enroll into class
+    - Enroll subject
+    - Upload assignment submission
+    - Update Profile
