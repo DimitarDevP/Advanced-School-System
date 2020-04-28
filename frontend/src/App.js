@@ -5,12 +5,11 @@ import {withRouter} from 'react-router-dom'
 
 import {login} from "./redux/actions/UserActions"
 
-import Nav from "./Components/Global/Nav"
-import Profile from "./Components/Containers.js/Profile"
 import Container from "./Components/Landing/Container"
+import Profile from "./Components/Containers.js/Profile"
+import Nav from "./Components/Global/Nav"
 import Homeroom from "./Components/Containers.js/Homeroom"
-import Class from "./Components/Containers.js/Class"
-import Student from "./Components/StudentComponents/Student"
+
 import "./App.css"
 
 class App extends React.Component {
@@ -32,8 +31,7 @@ class App extends React.Component {
                     <Nav />
                     <Route exact path="/" component={Container} />
                     <Route path="/user/:user_id" component={this.props.currentUser.user.verified ?  Profile : this.verify} />
-                    <Route path="/class/:class_id" component={Class}/>
-                    <Route path="/student/:user_id" component={Student} />
+                    <Route path="/class/:class_id" />
                     <Route path="/assignments/" />
                     <Route path="/subjects/" />
                     <Route path="/homeroom/" component={Homeroom}/>

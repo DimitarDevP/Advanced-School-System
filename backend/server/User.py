@@ -59,7 +59,7 @@ class User:
             "error_code" : "200"
         })
         
-        
+
     def logout(self, request):
         #
         # Expected Input - JSON data POST request 
@@ -200,13 +200,13 @@ class User:
         image = request.files['image']
         data = request.form
         
-        print(data["auth_key"])
-        if not self.auth_user(data['auth_key']):
-            print(data["auth_key"])
-            return jsonify({
-                "error_message" : "Session Expired.",
-                "error_code" : "401"
-            })
+        # print(data["auth_key"])
+        # if not self.auth_user(data['auth_key']):
+        #     print(data["auth_key"])
+        #     return jsonify({
+        #         "error_message" : "Session Expired.",
+        #         "error_code" : "401"
+        #     })
         try:
             path = fsql.read("""SELECT * FROM users WHERE user_id = %s""", (data["user_id"],), 0)["profile_picture"]
             if(path != "default.png"):
@@ -245,24 +245,6 @@ class User:
             "error_code" : "200"
         })
 
-
-    def get_all_users(self, request):
-        if not request.method == 'POST':
-            return jsonify({
-                "error_message" : "Bad request.",
-                "error_code" : "400"
-            })
-
-        users = fsql.read("SELECT * FROM users", (), 1)
-
-        return jsonify({
-            "users": users,
-            "response" : {
-                "error_code" : "200", 
-                "error_message" : "Success",
-            }
-        })
-        
 
     def auth_user(self, auth_key):
         try:

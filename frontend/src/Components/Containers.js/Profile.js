@@ -44,7 +44,7 @@ class Profile extends Component {
 
     render() {
         return (
-            <div id="Profile" className="container showing">
+            <div id="Profile">
                 <h2>Update profile</h2>
                 <form onChange={this.handleChange} onSubmit={this.handleSubmit} >
                     

@@ -1,6 +1,8 @@
 #Homeroom {
+    max-width: 100%;
     min-height: calc(100vh - 180px);
     background: #1A1E29;
+    margin-left: 350px;
     padding: 90px 150px;
 }
 
@@ -21,35 +23,6 @@
     user-select: none;
     cursor: pointer;
     margin: 10px;
-    transition: 300ms;
-}
-
-.HomeroomView > a {
-    display: inline-block;
-    background: #3C3F4F;
-    color: #FFF;
-    text-align: center;
-    user-select: none;
-    cursor: pointer;
-    margin: 10px;
-    text-decoration: none;
-    padding: 50px 35px 10px 35px;
-    transition: 300ms;
-}
-
-.HomeroomView > a:hover,
-.HomeroomView > span:hover {
-    background: #846BC7;
-}
-
-.HomeroomView > a > h2, 
-.HomeroomView > a > h5{
-    display: inline;
-    vertical-align: text-top;
-}
-
-.HomeroomView > a > h6 {
-    margin-top: 40px;
 }
 
 .HomeroomView > form {
@@ -90,5 +63,6 @@
 }
 
 .class {
+    font-size: 3em !important;
     font-family: Arial, Helvetica, sans-serif;
 }

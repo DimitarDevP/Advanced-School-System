@@ -20,12 +20,13 @@ class Classes:
 
         data = request.params
 
-        _class = fsql.read("""SELECT * FROM classes WHERE class_id = %s""", (data["class_id"], ), 0)
-        students = fsql.read("""SELECT * FROM enrolled_classes WHERE class_id = %s""", (_class["class_id"], ))
+        _class = fsql.read("""SELECT * FROM classes WHERE grade = %s AND class = %s""", (data["class_id"], ), 0)
+        students = fsql.read("""SELECT * FROM enrolled_classes WHERE class_id = %s""", (str(_class["class_id"])))
+        
         students_array = list()
         
         for student in students:
-            student = fsql.read("""SELECT * FROM users WHERE user_id = %s""", (student['student_id'], ), 0)
+            student = fsql.read("""SELECT * FROM users WHERE user_id = %s""", (str(student['student_id'])), 0)
             students_array.append(student)
         
 
@@ -44,17 +45,11 @@ class Classes:
             })
 
         data = request.params
-        if data["user_role"] == "Professor":
-            _classes = fsql.read("""SELECT * FROM classes WHERE professor_id = %s""", (data["user_id"], ))
-        else:
-            ids = fsql.read("""SELECT * FROM enrolled_classes WHERE student_id = %s""", (data["user_id"], ))
-            _classes = []
-            for _id in ids:
-                _class = fsql.read("""SELECT * FROM classes WHERE class_id = %s""", (_id["class_id"], ), 0)
-                _classes.append(_class)
+
+        _classes = fsql.read("""SELECT * FROM classes WHERE professor_id = %s""", (data["user_id"], ))        
 
         return jsonify({
-            "currentUserClasses": _classes,
+            "classes": _classes,
             "error_code" : "200",
             "error_message" : "Success"
         })
@@ -68,11 +63,11 @@ class Classes:
         
         data = request.params
 
-        if user["user_role"] != "Professor":
-            return jsonify({
-                "error_message" : "Access Denied. Unauthorized user",
-                "error_code" : "403"
-            })
+        # if user["user_role"] != "Professor":
+        #     return jsonify({
+        #         "error_message" : "Access Denied. Unauthorized user",
+        #         "error_code" : "403"
+        #     })
         
         if not self.auth_user(data['auth_key']):
             return jsonify({
@@ -86,7 +81,7 @@ class Classes:
         createdClass = fsql.read("""SELECT * FROM classes WHERE professor_id = %s AND grade = %s AND class = %s  ANd _year = %s""", (data["user_id"], data["grade"], data["class"], data["year"]), 0)
 
         return jsonify({
-            "class" : createdClass,
+            "currentUserClass" : currentClass,
             "error_code" : "200",
             "error_message" : "Success"
         })
@@ -101,24 +96,24 @@ class Classes:
         data = request.params
         user = data['user']
         _class = data["class"]
+        print(user["user_role"])
 
         if user["user_role"] != "Student":
             return jsonify({
                 "error_message" : "Access Denied. Unauthorized user",
                 "error_code" : "403"
             })
-        print(user['auth_key'])
-        if not self.auth_user(user['auth_key']):
+        
+        if not self.auth_user(data['auth_key']):
             return jsonify({
                 "error_message" : "Session Expired.",
                 "error_code" : "401"
             })
 
-        _class = fsql.read("""SELECT * FROM classes WHERE grade = %s AND class = %s AND _year = %s""", (_class["grade"], _class["class"], _class["year"]), 0)
-        fsql.create("""INSERT INTO enrolled_classes (class_id, student_id) VALUES (%s, %s)""", (_class["class_id"], user['user_id']))
+        class_id = fsql.read("""SELECT * FROM classes WHERE grade = %s AND class = %s AND _year = %s""", (_class["grade"], _class["class"], _class["year"]), 0)["class_id"]
+        fsql.create("""INSERT INTO enrolled_classes (class_id, student_id) VALUES (%s, %s)""", (class_id, user['user_id']))
         
         return jsonify({
-            "class": _class,
             "error_code" : "200",
             "error_message": "Success"
         })

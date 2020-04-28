@@ -1,38 +1,40 @@
-import { CREATE_CLASS, ENROLL_CLASS, GET_CLASS, LOGOUT, GET_MY_CLASSES } from '../constants'
+import { CREATE_CLASS, ENROLL_CLASS, GET_CLASS } from '../constants'
 
 let classes = {
-    currentUserClasses: [],
-	allClasses: []
+    currentUserClass: {
+		class_id: "",
+		grade: "",
+		class: "",
+		_year: "",
+		students : {
+			
+		}
+	},
+	allClasses: [
+		{
+			class_id: "",
+			grade: "",
+			class: "",
+			_year: "",
+			students : {
+				
+			}
+		}
+	]
 }
 
 export const classReducer = (state = classes, action) => {
 	switch (action.type) {
 		case CREATE_CLASS:
-			return {
+			const newState = {
 				...state,
-				currentUserClasses: [
-					...state.currentUserClasses,
-					action.payload.class
-				]
+				...action.payload
 			}
-		case GET_MY_CLASSES:
-			return {
-				...state,
-				currentUserClasses: action.payload.currentUserClasses
-			}
+			return newState
 		case ENROLL_CLASS:
-			
-			return {
-				...state,
-				currentUserClasses: [...state.currentUserClasses, action.payload.class]
-			}
+			return state
 		case GET_CLASS:
 			return state
-		case LOGOUT:
-			return {
-				currentUserClasses: [],
-				allClasses: []
-			}
 		default:
 			return state
 	}

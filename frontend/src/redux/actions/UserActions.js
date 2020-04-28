@@ -1,24 +1,15 @@
-import { SIGNED_IN, LOGIN, LOGOUT, REGISTER, UPDATE_IMAGE, GET_ALL_USERS } from '../constants'
+import { SIGNED_IN, LOGIN, LOGOUT, REGISTER, UPDATE_IMAGE } from '../constants'
 
 import Axios from 'axios'
 // import FormData from 'form-data'
 
 export const login = (user) => {
     return (dispatch, getState) => {
+
         Axios.defaults.withCredentials = true
         Axios.post("http://localhost:5000/api/user/login", user)
         .then(response => {
             dispatch({type: LOGIN, payload: response.data})
-        })
-    }
-}
-
-export const getAllUsers = () => {
-    return (dispatch, getState) => {
-        Axios.defaults.withCredentials = true
-        Axios.post("http://localhost:5000/api/user/get_all_users")
-        .then(response => {
-            dispatch({type: GET_ALL_USERS, payload: response.data})
         })
     }
 }

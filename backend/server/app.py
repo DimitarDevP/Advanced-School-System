@@ -47,10 +47,6 @@ def register():
 def validate_email():
     return user.validate_email(request)
 
-@app.route('/api/user/get_all_users', methods=['POST'])
-def get_all_users():
-    return user.get_all_users(request)
-
 @app.route("/api/abscences/register_rfid_present_status", methods=['POST'])
 def register_rfid_present_status():
     return abscences.register_rfid_present_status(request)
@@ -86,10 +82,6 @@ def get_all_subjects():
 @app.route('/api/subject/get_enrolled_subjects', methods=['GET'])
 def get_enrolled_subjects():
     return subjects.get_enrolled_subjects(request)
-
-@app.route("/api/grades/get_subject_classes", methods=["POST"])
-def get_subject_classes():
-    return subjects.get_subject_classes(request)
 
 @app.route("/api/classes/get_class", methods=["POST"])
 def get_class():

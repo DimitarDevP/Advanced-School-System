@@ -13,7 +13,7 @@
     top: 100px;
 }
 
-#Login > form > label, #Login > form > input {
+#Login > form > label,input {
     display: block;
     width: 300px;
     border: none;
