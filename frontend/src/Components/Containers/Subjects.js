@@ -33,11 +33,11 @@ class Subjects extends Component {
                 {this.props.currentUser.user.user_role === "Professor" ? (<span onClick={this.tollgeCreateClass}>+</span>) : ("")}
                 {this.props.currentUser.user.user_role === "Professor" ? (
                     <form onChange={this.handleChange} className="hidden" onSubmit={this.handleSubmit}>
-                        <label htmlFor="grade">Subject Name</label>
+                        <label htmlFor="subject_name">Subject Name</label>
                         <input type="text" name="subject_name" value={this.state.subject_name} />
-                        <label htmlFor="grade">Subject Description</label>
+                        <label htmlFor="subject_description">Subject Description</label>
                         <textarea name="subject_description" value={this.state.subject_description} />
-                        <button>Create Class</button>
+                        <button>Create Subject</button>
                     </form>) : ("")}
             </div>
         )

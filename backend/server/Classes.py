@@ -107,7 +107,6 @@ class Classes:
                 "error_message" : "Access Denied. Unauthorized user",
                 "error_code" : "403"
             })
-        print(user['auth_key'])
         if not self.auth_user(user['auth_key']):
             return jsonify({
                 "error_message" : "Session Expired.",
@@ -131,7 +130,6 @@ class Classes:
             auth_key = beginning + ending
             auth_key = auth_key[:len(auth_key) - 1]
             jwt.decode(auth_key, "randKey")
-            print(auth_key)
             return True
         except:
             return True

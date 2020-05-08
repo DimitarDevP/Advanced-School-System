@@ -26,14 +26,6 @@
     color: #FFF;
     margin: 0px 25px;
     height: 500px;
-    user-select: none;
-    cursor: pointer;
-    transition: 300ms;
-}
-
-#Info > span:nth-child(2).hidden {
-    height: 50px;
-    overflow: hidden;
 }
 
 #Info > span > span {
@@ -245,4 +237,56 @@
     padding: 4px 5px;
     border-top: 1px solid #FFF;
     border-bottom: 1px solid #FFF;
+}
+
+#Subjects > form {
+    color: #FFF;
+    width: 400px;
+    margin: 50px 10px;
+    transition: 200ms;
+    height: 285px;
+    overflow: hidden;
+}
+
+#enrollSubject {
+    margin-left: 325px;
+    margin-top: 50px;
+}
+
+#enrollSubject > h2 {
+    margin-bottom: 35px;
+    color: #FFF;
+}
+
+#enrollSubject > form > select{
+    width: 650px;
+    display: block;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    height: 28px;
+    background: #1A1E29;
+    padding: 0px 10px;
+    color: #EEE;
+    background: #846BC7;
+    border: none;
+}
+
+#enrollSubject > form > label {
+    color: #FFF;
+}
+
+#enrollSubject > form > textarea {
+    height: 70px !important;
+    padding: 10px;
+}
+
+#enrollSubject > form > button {
+    color: #FFF;
+    border: none;
+    background: #846BC7;
+    padding: 8px 17px;
+    border-radius: 5px;
+    font-size: 1.05em;
+    font-weight: 550;
+    cursor: pointer;
 }

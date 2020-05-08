@@ -51,7 +51,6 @@ class Grades:
         for i in range(1, 5):
             for grade in grades:
                 if str(grade["quarter"]) == str(i):
-                    print(True)
                     quarters[i - 1][grade["_type"]] = grade["_value"]
 
         return jsonify(
@@ -65,8 +64,6 @@ class Grades:
         data = request.params
         professor = data["user"]
         grade = data["grade"]
-
-        print(grade)
 
         if not self.auth_user(professor["auth_key"]):
             return jsonify({"error_message": "Session Expired.", "error_code": "401"})
@@ -96,13 +93,11 @@ class Grades:
                 (data["student_id"], data["subject_id"], i, key), 0)
                 if not isinstance(key_res, dict):
                     if value != "":
-                        print(data["student_id"], data["subject_id"], value, i, key)
                         fsql.create("""INSERT INTO marks (student_id, subject_id, _value, quarter, _type) VALUES (%s, %s, %s, %s, %s)""",
                             (data["student_id"], data["subject_id"], value, i, key)
                         )
                 else:
                     if value != "":
-                        print(value, data["student_id"], data["subject_id"], i, key)
                         fsql.update("""UPDATE marks SET _value = %s WHERE student_id = %s AND subject_id = %s AND quarter = %s AND _type = %s""",
                             (value, data["student_id"], data["subject_id"], i, key)
                         )
@@ -123,7 +118,6 @@ class Grades:
         for i in range(1, 5):
             for grade in grades:
                 if str(grade["quarter"]) == str(i):
-                    print(True)
                     quarters[i - 1][grade["_type"]] = grade["_value"]
 
         return jsonify(
@@ -137,7 +131,6 @@ class Grades:
             auth_key = beginning + ending
             auth_key = auth_key[: len(auth_key) - 1]
             jwt.decode(auth_key, "randKey")
-            print(auth_key)
             return True
         except:
             return True

@@ -3,12 +3,14 @@ import React, { Component } from 'react'
 import Info from "./Info"
 import Abscences from "./Abscences"
 import Subjects from "./Subjects"
+import EnrollSUbject from "./EnrollSubject"
 
 import "./Student.css"
 
 import {connect} from 'react-redux'
 import {getAllUsers} from "../../redux/actions/UserActions"
 import {getAbscences, setAbscencesStatus, addAbscence} from "../../redux/actions/AbscencesActions"
+import {getAllSubjects, enrollSubject} from "../../redux/actions/subjectActions"
 
 class Student extends Component {
 
@@ -23,7 +25,6 @@ class Student extends Component {
     }
 
     componentWillReceiveProps() {
-        console.log("Props!")
         let student = this.props.currentUser.Users.filter(user => user.user_id == this.props.match.params.user_id)[0]
         let abscences = this.props.abscences.all_abscences.filter(abscence => abscence.student_id == this.props.match.params.user_id)
         if(typeof student !== "undefined"){
@@ -49,10 +50,7 @@ class Student extends Component {
     componentDidMount() {
         this.props.getAllUsers()
         this.props.getAbscences()
-    }
-
-    toggleVisible = e => {
-        e.target.parentElement.classList.toggle("hidden")
+        this.props.getAllSubjects()
     }
 
     render() {
@@ -69,7 +67,6 @@ class Student extends Component {
                             phone_number={this.state.student.phone_number}
                             parent_phone={this.state.student.parent_phone}
                             profile_picture={this.state.student.profile_picture}
-                            toggleVisible={this.toggleVisible}
                         />
                         
                         <Abscences 
@@ -83,6 +80,12 @@ class Student extends Component {
                         <Subjects
                             user_id={this.props.match.params.user_id} 
                         />
+
+                        <EnrollSUbject
+                            subjects={this.props.allSubjects} 
+                            userIsCurrent={this.props.match.params.user_id == this.props.currentUser.user.user_id}
+                            enrollSubject={this.props.enrollSubject}
+                         />
                     </div>
                 ) : (<h2>Loading</h2>)}
                 
@@ -94,7 +97,8 @@ class Student extends Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         currentUser: state.currentUser,
-        abscences: state.abscences
+        abscences: state.abscences,
+        allSubjects: state.subjects.allSubjects
     }
 }
 
@@ -103,7 +107,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         getAllUsers: () => {dispatch(getAllUsers())},
         getAbscences: () => (dispatch(getAbscences())),
         setAbscencesStatus: (abscencesArray) => (dispatch(setAbscencesStatus(abscencesArray))),
-        addAbscence: (abscence) => dispatch(addAbscence(abscence))
+        addAbscence: (abscence) => dispatch(addAbscence(abscence)),
+        getAllSubjects: () => dispatch(getAllSubjects()),
+        enrollSubject: (subject_id, student_id) => dispatch(enrollSubject(subject_id))
     }
 }
 

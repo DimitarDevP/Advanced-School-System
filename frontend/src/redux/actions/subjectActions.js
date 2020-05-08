@@ -19,7 +19,7 @@ export const enrollSubject = (subject_id) => {
         Axios.defaults.withCredentials = true
         const data = {
             subject_id: subject_id,
-            student_id: getState().currentUser.user.user_id,
+            user_id: getState().currentUser.user.user_id,
             auth_key: getState().currentUser.auth_key
         }
         Axios.post("http://localhost:5000/api/subjects/enroll_subject", data)

@@ -87,7 +87,7 @@ def get_all_subjects():
 def get_enrolled_subjects():
     return subjects.get_enrolled_subjects(request)
 
-@app.route("/api/grades/get_subject_classes", methods=["POST"])
+@app.route("/api/subjects/get_subject_classes", methods=["POST"])
 def get_subject_classes():
     return subjects.get_subject_classes(request)
 

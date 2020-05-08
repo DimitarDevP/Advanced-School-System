@@ -62,7 +62,7 @@ function Abscences(props) {
                 <h4><input type="text" name="date" value="Date" /> </h4>
                 <h4><input type="text" name="_period" /> </h4> 
                 <h4>
-                    <input type="text" name="_status" value="Prazno" /> 
+                    <input type="text" name="_status" value="Pending" /> 
                 </h4>
             </span>
             {props.currentUserRole === "Professor" ? (

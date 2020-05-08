@@ -199,10 +199,8 @@ class User:
             
         image = request.files['image']
         data = request.form
-        
-        print(data["auth_key"])
+
         # if not self.auth_user(data['auth_key']):
-        #     print(data["auth_key"])
         #     return jsonify({
         #         "error_message" : "Session Expired.",
         #         "error_code" : "401"
@@ -271,7 +269,6 @@ class User:
             auth_key = beginning + ending
             auth_key = auth_key[:len(auth_key) - 1]
             jwt.decode(auth_key, "randKey")
-            print(auth_key)
             return False
         except:
             return True

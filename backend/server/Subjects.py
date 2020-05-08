@@ -94,14 +94,22 @@ class Subjects:
 
         data = request.params
         
-        if not self.auth_user(data['auth_key']):
-            return jsonify({
-                "error_message" : "Session Expired.",
-                "error_code" : "401"
-            })
+        # if not self.auth_user(data['auth_key']):
+        #     return jsonify({
+        #         "error_message" : "Session Expired.",
+        #         "error_code" : "401"
+        #     })
 
-        fsql.create("""INSERT INTO enrolled_subjects (subject_id, student_id) VALUES (%s, %s)""", (data["subject_id"], data["student_id"]))
-        subject = fsql.read("""SELECT * FROM """)
+        enrolled_subjects = fsql.read("""SELECT * FROM enrolled_subjects WHERE student_id = %s""", (data["user_id"], ))
+
+        for subject in enrolled_subjects:
+            if subject["subject_id"] == data["subject_id"]:
+                return jsonify({
+                    "error_code" : "200", 
+                    "error_message" : "Success"
+                })
+
+        fsql.create("""INSERT INTO enrolled_subjects (subject_id, student_id) VALUES (%s, %s)""", (data["subject_id"], data["user_id"]))
 
         return jsonify({
             "error_code" : "200", 
@@ -189,7 +197,6 @@ class Subjects:
         #         obj = {str(enroll["student_id"]) : list()}
         #         student_ids.append(obj)
 
-        # print(student_ids)
 
         # enrolled_subjects = list()
 
@@ -213,7 +220,6 @@ class Subjects:
             auth_key = beginning + ending
             auth_key = auth_key[:len(auth_key) - 1]
             jwt.decode(auth_key, "randKey")
-            print(auth_key)
             return True
         except:
             return True

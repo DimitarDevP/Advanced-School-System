@@ -215,7 +215,6 @@ class Abscences:
             auth_key = beginning + ending
             auth_key = auth_key[:len(auth_key) - 1]
             jwt.decode(auth_key, "randKey")
-            print(auth_key)
             return True
         except:
             return True

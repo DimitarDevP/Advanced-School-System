@@ -7,7 +7,7 @@ export default function Info(props) {
                 <img src={"http://localhost:5000/public/user/profile/" + props.profile_picture} />
             </span>
             <span>
-                <h2 onClick={e => props.toggleVisible(e)}>About Me:</h2>
+                <h2>About Me:</h2>
                 <span>
                     <h3>Name: </h3>
                     <h3>{props.name}</h3>
