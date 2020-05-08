@@ -33,7 +33,6 @@ class Login extends React.Component {
     }
 
     componentDidUpdate() {
-        console.log(this.state.submitted)
         if(this.state.submitted){
             if(this.props.currentUser.error_code !== "200" && this.props.currentUser.error_code)
                 document.querySelectorAll("#Login > form > .error")[0].style.display = "block"

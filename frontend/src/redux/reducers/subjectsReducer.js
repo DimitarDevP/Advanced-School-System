@@ -1,27 +1,40 @@
-import { GET_ALL_ABSCENCES, SET_ABSCENCE, CHANGE_ABSCENCE_STATUS } from '../constants'
+import { CREATE_SUBJECT, ENROLL_SUBJECT, GET_ALL_SUBJECTS, GET_ENROLLED_SUBJECTS, GET_SUBJECT_CLASSES } from '../constants'
 
 let subjects = {
-    all_abscences: [
+    allSubjects: [
 
-    ]
+	],
+	enrolledSubjects: [
+
+	],
+	subjectsClasses: [
+
+	]
 }
 
 export const subjectsReducer = (state = subjects, action) => {
 	switch (action.type) {
-		case GET_ALL_ABSCENCES:
+		case CREATE_SUBJECT:
 			return {
-                all_abscences: action.payload.abscences
-            }
-		case SET_ABSCENCE:
-			return {
-				all_abscences: action.payload.abscences
+				...state,
+				allSubjects: action.payload.subjects
 			}
-		case CHANGE_ABSCENCE_STATUS:
+		case ENROLL_SUBJECT:
+			return state
+		case GET_ALL_SUBJECTS:
 			return {
-				all_abscences: [
-                    ...state.all_abscences,
-                    action.payload.abscence
-                ]
+				...state,
+				allSubjects: action.payload.subjects
+			}
+		case GET_ENROLLED_SUBJECTS:
+			return {
+				...state,
+				enrolledSubjects: action.payload.enrolled_subjects
+			}
+		case GET_SUBJECT_CLASSES:
+			return {
+				...state,
+				subjectsClasses: action.payload.classes
 			}
 		default:
 			return state

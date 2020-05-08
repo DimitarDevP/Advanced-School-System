@@ -6,11 +6,12 @@ import {withRouter} from 'react-router-dom'
 import {login} from "./redux/actions/UserActions"
 
 import Nav from "./Components/Global/Nav"
-import Profile from "./Components/Containers.js/Profile"
+import Profile from "./Components/Containers/Profile"
 import Container from "./Components/Landing/Container"
-import Homeroom from "./Components/Containers.js/Homeroom"
-import Class from "./Components/Containers.js/Class"
+import Homeroom from "./Components/Containers/Homeroom"
+import Class from "./Components/Containers/Class"
 import Student from "./Components/StudentComponents/Student"
+import Subjects from "./Components/Containers/Subjects"
 import "./App.css"
 
 class App extends React.Component {
@@ -35,7 +36,7 @@ class App extends React.Component {
                     <Route path="/class/:class_id" component={Class}/>
                     <Route path="/student/:user_id" component={Student} />
                     <Route path="/assignments/" />
-                    <Route path="/subjects/" />
+                    <Route path="/subjects/" component={Subjects}/>
                     <Route path="/homeroom/" component={Homeroom}/>
                 </Router>
             </div>

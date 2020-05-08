@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 
 import Info from "./Info"
 import Abscences from "./Abscences"
+import Subjects from "./Subjects"
 
 import "./Student.css"
 
@@ -21,17 +22,33 @@ class Student extends Component {
         }
     }
 
+    componentWillReceiveProps() {
+        console.log("Props!")
+        let student = this.props.currentUser.Users.filter(user => user.user_id == this.props.match.params.user_id)[0]
+        let abscences = this.props.abscences.all_abscences.filter(abscence => abscence.student_id == this.props.match.params.user_id)
+        if(typeof student !== "undefined"){
+            this.setState({
+                student,
+            })
+        }
+
+        if (typeof abscences !== "undefined" || this.state.abscences !== abscences){
+            this.setState({
+                abscences,
+            })
+        }
+
+        if (typeof student !== "undefined" && typeof abscences !== undefined){
+            this.setState({
+                dataIsLoaded: true,
+            })
+        }
+
+    }
+
     componentDidMount() {
         this.props.getAllUsers()
         this.props.getAbscences()
-        const student = this.props.currentUser.Users.filter(user => user.user_id == this.props.match.params.user_id)[0]
-        const abscences = this.props.abscences.all_abscences.filter(abscence => abscence.student_id == this.props.match.params.user_id)
-        this.setState({
-            student,
-            abscences
-        })
-        
-        this.setState({dataIsLoaded: true})
     }
 
     toggleVisible = e => {
@@ -54,9 +71,20 @@ class Student extends Component {
                             profile_picture={this.state.student.profile_picture}
                             toggleVisible={this.toggleVisible}
                         />
-                        <Abscences user_id={this.props.match.params.user_id} update={this.props.getAbscences} addAbscence={this.props.addAbscence} setAbscencesStatus={this.props.setAbscencesStatus} abscences={this.state.abscences}/>
+                        
+                        <Abscences 
+                            user_id={this.props.match.params.user_id} 
+                            update={this.props.getAbscences} 
+                            addAbscence={this.props.addAbscence} 
+                            setAbscencesStatus={this.props.setAbscencesStatus} 
+                            abscences={this.state.abscences}
+                        />
+
+                        <Subjects
+                            user_id={this.props.match.params.user_id} 
+                        />
                     </div>
-                ) : ("Loading")}
+                ) : (<h2>Loading</h2>)}
                 
             </div>
         )

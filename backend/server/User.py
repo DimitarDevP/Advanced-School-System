@@ -169,7 +169,7 @@ class User:
                         <a  style='text-decoration: none; background: #34495E; text-align: center; padding: 10px 20px; color: #FFF; font-family: sans-serif; font-weight: bold;' href='http://localhost:5000/api/user/validate_email?user_id=%s'>Verify</a>
                     </body>
                 </html>
-            """ %45 )
+            """ %user["user_id"] )
         
         msg.attach(MIMEText(html, 'html'))
 
@@ -201,12 +201,12 @@ class User:
         data = request.form
         
         print(data["auth_key"])
-        if not self.auth_user(data['auth_key']):
-            print(data["auth_key"])
-            return jsonify({
-                "error_message" : "Session Expired.",
-                "error_code" : "401"
-            })
+        # if not self.auth_user(data['auth_key']):
+        #     print(data["auth_key"])
+        #     return jsonify({
+        #         "error_message" : "Session Expired.",
+        #         "error_code" : "401"
+        #     })
         try:
             path = fsql.read("""SELECT * FROM users WHERE user_id = %s""", (data["user_id"],), 0)["profile_picture"]
             if(path != "default.png"):

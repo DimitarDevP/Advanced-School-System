@@ -44,7 +44,7 @@ export const addAbscence = abscence => {
         Axios.defaults.withCredentials = true
         Axios.post("http://localhost:5000/api/abscences/add_abscences", data)
         .then(response => {
-            dispatch({type: CHANGE_ABSCENCE_STATUS, payload: response.data})
+            dispatch({type: SET_ABSCENCE, payload: response.data})
         })  
     }
 }

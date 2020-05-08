@@ -59,7 +59,8 @@ export const userReducer = (state = currentUser, action) => {
 					user_id: 0,
 					user_role: '',
 					verified: 0
-				}
+				},
+				Users: []
 			}
 		case UPDATE_IMAGE:
 			const data = action.payload

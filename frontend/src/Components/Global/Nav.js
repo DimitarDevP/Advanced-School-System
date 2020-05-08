@@ -22,7 +22,6 @@ function ProfessorNav(props) {
 
     const handleToggle = () => {
         var containers = document.querySelectorAll(".container")
-        console.log(containers)
         for(let i = 0; i < containers.length; i++){
             containers[i].classList.toggle("showing")
             containers[i].classList.toggle("hidden")

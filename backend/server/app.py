@@ -75,15 +75,15 @@ def create_subject():
 def enroll_subject():
     return subjects.enroll_subject(request)
 
-@app.route('/api/subject/get_subject', methods=['GET'])
+@app.route('/api/subjects/get_subject', methods=['GET'])
 def get_subject():
     return subjects.get_subject(request)
 
-@app.route('/api/subject/get_all_subjects', methods=['GET'])
+@app.route('/api/subjects/get_all_subjects', methods=['GET'])
 def get_all_subjects():
     return subjects.get_all_subjects(request)
 
-@app.route('/api/subject/get_enrolled_subjects', methods=['GET'])
+@app.route('/api/subjects/get_enrolled_subjects', methods=['GET'])
 def get_enrolled_subjects():
     return subjects.get_enrolled_subjects(request)
 

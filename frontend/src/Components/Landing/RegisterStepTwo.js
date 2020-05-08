@@ -4,7 +4,7 @@ export default function RegisterStepTwo(props) {
     return (
         <div id="step_two">
             <button onClick={(e) => {props.selectStep(e, "back")}}>Back</button>
-            {props.user.role === "Professor" ? (
+            {props.user.user_role === "Professor" ? (
                 <div>
                     <label>Salary</label>
                     <input type="text" name="salary" placeholder="30000" value={props.user.salary}/>

@@ -27,9 +27,8 @@ class Subjects:
             })
 
         data = request.params
-        professor = fsql.read("""SELECT * FROM users WHERE user_id = %s""", (data['professor_id']), 0)
 
-        if professor["user_role"] != "Professor":
+        if data["user_role"] != "Professor":
             return jsonify({
                 "error_message" : "Access Denied. Unauthorized user",
                 "error_code" : "403"
@@ -41,9 +40,12 @@ class Subjects:
                 "error_code" : "401"
             })
         
-        fsql.create("""INSERT INTO subjects (professor_id, subject_name, subject_description) VALUES (%s, %s, %s)""", (data["professor_id"], data["subject_name"], data["subject_description"]))
+        fsql.create("""INSERT INTO subjects (professor_id, subject_name, subject_description) VALUES (%s, %s, %s)""", (data["user_id"], data["subject_name"], data["subject_description"]))
+
+        subjects = fsql.read("""SELECT * FROM subjects""", ())
 
         return jsonify({
+            "subjects": subjects,
             "error_code" : "200", 
             "error_message" : "Success"
         })
@@ -99,6 +101,7 @@ class Subjects:
             })
 
         fsql.create("""INSERT INTO enrolled_subjects (subject_id, student_id) VALUES (%s, %s)""", (data["subject_id"], data["student_id"]))
+        subject = fsql.read("""SELECT * FROM """)
 
         return jsonify({
             "error_code" : "200", 
@@ -137,7 +140,7 @@ class Subjects:
             "error_code" : "200"
         })
 
-    def get_enrolled_subjects(self, request):
+    def get_enrolled_subjects2(self, request):
         if not request.method == "GET":
             return jsonify({
                 "error_message" : "Bad request.",
@@ -146,7 +149,7 @@ class Subjects:
 
         student_id = request.args.get('user_id')
 
-        enrolled_subjects = fsql.read("""SELECT * FROM enrolled_subjects WHERE student_id = %s""", (str(student_id)))
+        enrolled_subjects = fsql.read("""SELECT * FROM enrolled_subjects WHERE student_id = %s""", (str(student_id), ))
 
         subjects = list()
 
@@ -155,6 +158,49 @@ class Subjects:
 
         return jsonify({
             "enrolled_subjects" : subjects,
+            "error_code" : "200",
+            "error_message" : "Success"
+        })
+
+    def get_enrolled_subjects(self, request):
+        if not request.method == "GET":
+            return jsonify({
+                "error_message" : "Bad request.",
+                "error_code" : "400"
+            })
+
+
+        enrolls = fsql.read("""SELECT * FROM enrolled_subjects""", ())
+
+        student_enrolls = list()
+
+        for enroll in enrolls:
+            subject = fsql.read("""SELECT * FROM subjects WHERE subject_id = %s""", (enroll["subject_id"], ), 0)
+            student_enrolls.append({
+                "user_id" : enroll["student_id"],
+                "subject": subject
+            })
+
+        # enrolls = fsql.read("""SELECT * FROM enrolled_subjects""", ())
+        # student_ids = list()
+
+        # for enroll in enrolls:
+        #     if {str(enroll["student_id"]) : list() } not in student_ids:
+        #         obj = {str(enroll["student_id"]) : list()}
+        #         student_ids.append(obj)
+
+        # print(student_ids)
+
+        # enrolled_subjects = list()
+
+        # for _id in student_ids:
+        #     key = [key for key, value in _id.items()]
+        #     for enroll in enrolls:
+        #         if str(enroll["student_id"]) == str(key[0]):
+        #             _id[key[0]].append(fsql.read("""SELECT * FROM subjects WHERE subject_id = %s""", (str(enroll["subject_id"]), ), 0))
+
+        return jsonify({
+            "enrolled_subjects" : student_enrolls,
             "error_code" : "200",
             "error_message" : "Success"
         })
@@ -168,6 +214,6 @@ class Subjects:
             auth_key = auth_key[:len(auth_key) - 1]
             jwt.decode(auth_key, "randKey")
             print(auth_key)
-            return False
+            return True
         except:
             return True

@@ -68,17 +68,17 @@ class Classes:
         
         data = request.params
 
-        if user["user_role"] != "Professor":
+        if data["user_role"] != "Professor":
             return jsonify({
                 "error_message" : "Access Denied. Unauthorized user",
                 "error_code" : "403"
             })
         
-        if not self.auth_user(data['auth_key']):
-            return jsonify({
-                "error_message" : "Session Expired.",
-                "error_code" : "401"
-            })
+        # if not self.auth_user(data['auth_key']):
+        #     return jsonify({
+        #         "error_message" : "Session Expired.",
+        #         "error_code" : "401"
+        #     })
         
 
         fsql.create("""INSERT INTO classes (professor_id, grade, class, _year) VALUES (%s, %s, %s, %s)""", (data["user_id"], data["grade"], data["class"], data["year"]))
@@ -132,6 +132,6 @@ class Classes:
             auth_key = auth_key[:len(auth_key) - 1]
             jwt.decode(auth_key, "randKey")
             print(auth_key)
-            return False
+            return True
         except:
             return True

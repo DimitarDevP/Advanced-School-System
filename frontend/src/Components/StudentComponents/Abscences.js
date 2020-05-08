@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
+import { connect } from 'react-redux'
 
-export default function Abscences(props) {
+function Abscences(props) {
 
     const handleSubmit = e => {
         e.preventDefault()
@@ -45,7 +46,7 @@ export default function Abscences(props) {
         )
     })
     return (
-        <div id="Abscences">
+        <div id="Abscences" className="tableClass">
             <h2>Abscences:</h2>
             <span>
                 <h4>ID</h4>
@@ -64,8 +65,21 @@ export default function Abscences(props) {
                     <input type="text" name="_status" value="Prazno" /> 
                 </h4>
             </span>
-            <button onClick={handleSubmit}>Update Data</button>
-            <button onClick={handleNewAbscence}>Create Abscence</button>
+            {props.currentUserRole === "Professor" ? (
+                    <div>
+                        <button onClick={handleSubmit}>Update Data</button>
+                        <button onClick={handleNewAbscence}>Create Abscence</button>
+                    </div>
+                ) : ("")
+            }
         </div>
     )
 }
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        currentUserRole: state.currentUser.user.user_role
+    }
+}
+
+export default connect(mapStateToProps)(Abscences)

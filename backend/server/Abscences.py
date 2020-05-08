@@ -92,7 +92,10 @@ class Abscences:
             (data["abscence"]['user_id'], "Prazno", data["abscence"]["_description"], today, data['abscence']['_period'])
         )
 
+        abscences = fsql.read("""SELECT * FROM abscences""", ())
+
         return jsonify({
+            "abscences": abscences,
             "error_message" : "Success",
             "error_code" : "200"
         })
@@ -121,11 +124,11 @@ class Abscences:
 
         data = request.params
 
-        if not self.auth_user(data['auth_key']):
-            return jsonify({
-                "error_message" : "Session Expired.",
-                "error_code" : "401"
-            })
+        # if not self.auth_user(data['auth_key']):
+        #     return jsonify({
+        #         "error_message" : "Session Expired.",
+        #         "error_code" : "401"
+        #     })
 
         # _class = fsql.read("""SELECT * FROM classes WHERE professor_id = %s""", (str(data['user_id'])), 0)["class_id"]
         # students = fsql.read("""SELECT * FROM enrolled_classes WHERE class_id = %s""", (str(_class)))
@@ -213,6 +216,6 @@ class Abscences:
             auth_key = auth_key[:len(auth_key) - 1]
             jwt.decode(auth_key, "randKey")
             print(auth_key)
-            return False
+            return True
         except:
             return True

@@ -18,10 +18,7 @@ export const abscencesReducer = (state = abscences, action) => {
 			}
 		case SET_ABSCENCE:
 			return {
-				all_abscences: [
-                    ...state.all_abscences,
-                    action.payload.abscence
-                ]
+				all_abscences: action.payload.abscences
 			}
 		default:
 			return state

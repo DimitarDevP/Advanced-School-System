@@ -5,7 +5,6 @@ export const REGISTER = "REGISTER"
 export const UPDATE_IMAGE = "UPDATE_IMAGE"
 export const GET_ALL_USERS = "GET_ALL_USERS"
 
-
 export const CREATE_CLASS = "CREATE_CLASS"
 export const GET_CLASS = "GET_CLASS"
 export const ENROLL_CLASS = "ENROLL_CLASS"
@@ -21,3 +20,6 @@ export const GET_SUBJECT_CLASSES = "GET_SUBJECT_CLASSES"
 export const GET_ENROLLED_SUBJECTS = "GET_ENROLLED_SUBJECTS"
 export const ENROLL_SUBJECT = "ENROLL_SUBJECT"
 export const CREATE_SUBJECT = "CREATE_SUBJECT"
+
+export const GET_ALL_GRADES = "GET_ALL_GRADES"
+export const SET_GRADES = "SET_GRADES"

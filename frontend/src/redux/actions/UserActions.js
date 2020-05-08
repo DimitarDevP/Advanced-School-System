@@ -44,7 +44,6 @@ export const logout = () => {
 export const updateImage = (file) => {
     return async (dispatch, getState) => {
         const data = new FormData()
-        console.log(getState().currentUser.auth_key)
         data.append("auth_key", getState().currentUser.auth_key)
         data.append("user_id", getState().currentUser.user.user_id)
         data.append("image", file)
