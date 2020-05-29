@@ -80,12 +80,13 @@ class Student extends Component {
                         <Subjects
                             user_id={this.props.match.params.user_id} 
                         />
-
-                        <EnrollSUbject
+                        {this.props.currentUser.user.user_id == this.props.match.params.user_id ? (
+                            <EnrollSUbject
                             subjects={this.props.allSubjects} 
                             userIsCurrent={this.props.match.params.user_id == this.props.currentUser.user.user_id}
                             enrollSubject={this.props.enrollSubject}
                          />
+                        ) : ""}
                     </div>
                 ) : (<h2>Loading</h2>)}
                 

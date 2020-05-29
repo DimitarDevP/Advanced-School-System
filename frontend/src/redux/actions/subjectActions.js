@@ -53,7 +53,7 @@ export const getEnrolledSubjects = () => {
 export const getSubjectClasses = (subject_id) => {
     return (dispatch, getState) => {
         Axios.defaults.withCredentials = true
-        Axios.post("http://localhost:5000/api/subjects/get_subject_classes", subject_id)
+        Axios.post("http://localhost:5000/api/subjects/get_subject_classes", {"subject_id": subject_id})
         .then(response => {
             dispatch({type: GET_SUBJECT_CLASSES, payload: response.data}) // classes = []
         })

@@ -22,11 +22,11 @@ class Assignments:
         user = data['user']
         assignment = data['assignment']
 
-        if not self.auth_user(user["auth_key"]):
-            return jsonify({
-                "error_message" : "Session Expired.",
-                "error_code" : "401"
-            })
+        # if not self.auth_user(user["auth_key"]):
+        #     return jsonify({
+        #         "error_message" : "Session Expired.",
+        #         "error_code" : "401"
+        #     })
 
         if not user["user"]["user_role"] == "Professor":
             return jsonify({
@@ -35,7 +35,7 @@ class Assignments:
             })
 
         fsql.create("INSERT INTO assignments (creator_id, assignment_name, assignemnt_description, assignment_status) VALUES (%s, %s, %s, %s)", 
-            (user["user"]["user_id"], assignment["name"], assignment["description"], assignment["status"])
+            (user["user"]["user_id"], assignment["name"], assignment["description"], "Opened")
         )
 
         return jsonify({
@@ -85,10 +85,13 @@ class Assignments:
                 "error_code" : "400"
             })
 
-        if(request.args.get('assignment_id')):
-            assignments = fsql.read("""SELECT * FROM assignments WHERE assignment_id = %s""", (request.args.get('assignment_id'), ), 0)
-        else:
-            assignments = fsql.read("""SELECT * FROM assignments""", ())
+        assignments = fsql.read("""SELECT * FROM assignments""", ())
+        submissions = fsql.read("""SELECT * FROM assignment_submissions""", ())
+        for assignment in assignments:
+            assignment["submissions"] = list()
+            for submission in submissions:
+                if assignment["assignment_id"] == submission["assignment_id"]:
+                    assignment["submissions"].append(submission)
 
         return jsonify({
             "assignments" : assignments,

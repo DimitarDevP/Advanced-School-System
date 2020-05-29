@@ -11,7 +11,8 @@ import Container from "./Components/Landing/Container"
 import Homeroom from "./Components/Containers/Homeroom"
 import Class from "./Components/Containers/Class"
 import Student from "./Components/StudentComponents/Student"
-import Subjects from "./Components/Containers/Subjects"
+import Subjects from "./Components/ProfessorComponents/Subjects"
+import SubjectClasses from "./Components/ProfessorComponents/SubjectsClasses"
 import "./App.css"
 
 class App extends React.Component {
@@ -37,6 +38,7 @@ class App extends React.Component {
                     <Route path="/student/:user_id" component={Student} />
                     <Route path="/assignments/" />
                     <Route path="/subjects/" component={Subjects}/>
+                    <Route path="/subject/:subject_id" component={SubjectClasses}/>
                     <Route path="/homeroom/" component={Homeroom}/>
                 </Router>
             </div>

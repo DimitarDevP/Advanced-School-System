@@ -42,7 +42,7 @@ function ProfessorNav(props) {
                 <NavLink to="/home/">HOME</NavLink>
                 <NavLink to={"/user/"+props.currentUser.user.user_id}>PROFILE</NavLink>
                 <NavLink to={"/assignments/"}>ASSIGNMENTS</NavLink>
-                <NavLink to={"/subjects/"}>SUBJECTS</NavLink>
+                {props.currentUser.user.user_role === "Professor" ? <NavLink to={"/subjects/"}>SUBJECTS</NavLink> : ("") }
                 <NavLink to={"/homeroom/"}>CLASSES</NavLink>
                 <NavLink onClick={handleLogout} to={"/"}>LOGOUT</NavLink>
             </div>
