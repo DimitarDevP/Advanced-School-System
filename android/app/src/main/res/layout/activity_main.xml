@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".MainActivity">
+
+	<WebView
+		android:id="@+id/wv"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+
+	<TextView
+		android:id="@+id/tv"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="NO INTERNET CONNECTION"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintRight_toRightOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		android:visibility="invisible"/>
+
+	<LinearLayout
+		android:id="@+id/postavkiLL"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintRight_toRightOf="parent"
+		app:layout_constraintTop_toTopOf="parent">
+
+		<Space
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1" />
+
+		<EditText
+			android:id="@+id/del3TV"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:ems="3"
+			android:inputType="number"
+			android:minWidth="0dp" />
+
+		<TextView
+			android:id="@+id/textView"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:minWidth="0dp"
+			android:text="." />
+
+		<EditText
+			android:id="@+id/del4TV"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:ems="3"
+			android:inputType="number"
+			android:minWidth="0dp" />
+
+		<Button
+			android:id="@+id/loadB"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:minWidth="0dp"
+			android:text="LOAD" />
+
+		<Space
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1" />
+	</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
