@@ -19,7 +19,6 @@ class Assignments:
             })
 
         data = request.params
-        user = data['user']
         assignment = data['assignment']
 
         # if not self.auth_user(user["auth_key"]):
@@ -28,17 +27,20 @@ class Assignments:
         #         "error_code" : "401"
         #     })
 
-        if not user["user"]["user_role"] == "Professor":
-            return jsonify({
-                "error_message" : "Access Denied. Unauthorized user",
-                "error_code" : "403"
-            })
-
-        fsql.create("INSERT INTO assignments (creator_id, assignment_name, assignemnt_description, assignment_status) VALUES (%s, %s, %s, %s)", 
-            (user["user"]["user_id"], assignment["name"], assignment["description"], "Opened")
+        fsql.create("INSERT INTO assignments (user_id, assignment_name, assignemnt_description, assignment_status) VALUES (%s, %s, %s, %s)", 
+            (data["user_id"], assignment["assignment_name"], assignment["assignment_description"], "Opened")
         )
+        
+        assignments = fsql.read("""SELECT * FROM assignments""", ())
+        submissions = fsql.read("""SELECT * FROM assignment_submissions""", ())
+        for assignment in assignments:
+            assignment["submissions"] = list()
+            for submission in submissions:
+                if assignment["assignment_id"] == submission["assignment_id"]:
+                    assignment["submissions"].append(submission)
 
         return jsonify({
+            "assignments": assignments,
             "error_code" : "200", 
             "error_message" : "Success"
         })
@@ -112,7 +114,7 @@ class Assignments:
 
     def add_submission(self, request):
 
-        if not request.method == "POST":
+        if not request.method == "PATCH":
             return jsonify({
                 "error_message" : "Bad request.",
                 "error_code" : "400"
@@ -125,18 +127,20 @@ class Assignments:
 
         data = request.params
 
-        if not self.auth_user(data["auth_key"]):
-            return jsonify({
-                "error_message" : "Session Expired.",
-                "error_code" : "401"
-            })
+        print(data)
+
+        # if not self.auth_user(data["auth_key"]):
+        #     return jsonify({
+        #         "error_message" : "Session Expired.",
+        #         "error_code" : "401"
+        #     })
 
         submission = request.files['submission']
         filename = secure_filename(submission.filename)
         extension = filename.split(".")[len(filename.split(".")) - 1]
 
-        submission_file = "/public/assignments/student_" + str(data["user_id"]) + "_assignemnt_" + str(data["assignment_id"]) + "_submission." + extension
-        submission.save("."+submission_file)
+        submission_file = "public/assignments/student_" + str(data["user_id"]) + "_assignemnt_" + str(data["assignment_id"]) + "_submission." + extension
+        submission.save("./"+submission_file)
 
         fsql.create("""INSERT INTO assignment_submissions (submitter_id, assignment_id, submission_file) VALUES (%s, %s, %s)""", (data["user_id"], data["assignment_id"], submission_file))
 

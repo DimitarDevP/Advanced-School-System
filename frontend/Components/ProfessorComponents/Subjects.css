@@ -1,0 +1,97 @@
+#Subjects {
+    min-height: calc(100vh - 180px);
+    background: #1A1E29;
+    padding: 90px 150px;
+}
+
+#Subjects  > h2 {
+    color: #FFF;
+    margin-bottom: 40px;
+}
+
+#Subjects > span {
+    display: inline-block;
+    width: 150px;
+    height: 200px;
+    background: #3C3F4F;
+    color: #FFF;
+    text-align: center;
+    font-size: 10em;
+    line-height: 200px;
+    user-select: none;
+    cursor: pointer;
+    margin: 10px;
+    transition: 300ms;
+}
+
+#Subjects > form {
+    color: #FFF;
+    width: 350px;
+    margin: 50px 10px;
+    transition: 200ms;
+    height: 285px;
+    overflow: hidden;
+}
+
+#Subjects > form.hidden {
+    height: 0px !important;
+}
+
+#Subjects > form > input,
+#Subjects > form > textarea  {
+    width: calc(100% - 25px) !important;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    height: 28px;
+    background: #1A1E29;
+    padding: 0px 10px;
+    border-radius: 5px;
+    color: #EEE;
+    border: 1px solid #846BC7;
+    box-shadow: inset 0 0 5px #000000;
+}
+
+#Subjects > form > textarea {
+    height: 70px !important;
+    padding: 10px;
+}
+
+#Subjects > form > button {
+    color: #FFF;
+    border: none;
+    background: #846BC7;
+    padding: 8px 17px;
+    border-radius: 5px;
+    font-size: 1.05em;
+    font-weight: 550;
+    cursor: pointer;
+}
+
+#Subjects > a {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    background: #3C3F4F;
+    color: #FFF;
+    text-align: center;
+    user-select: none;
+    cursor: pointer;
+    margin: 10px;
+    text-decoration: none;
+    transition: 300ms;
+    width: calc(100% - 60px);
+    padding: 20px;
+}
+
+#Subjects > a:hover {
+    background: #846BC7;
+}
+
+@media only screen and (max-width : 940px) {
+    #Subjects {
+        min-height: calc(100vh - 180px);
+        background: #1A1E29;
+        padding: 90px 10px;
+    }
+}

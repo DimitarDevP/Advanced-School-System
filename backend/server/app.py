@@ -31,6 +31,10 @@ def login():
 def test(filename):
     return send_from_directory("./public/profile_pictures/", filename, as_attachment=True)
 
+@app.route('/public/assignments/<path:filename>')
+def file(filename):
+    return send_from_directory("./public/assignments/", filename, as_attachment=True)
+
 @app.route('/api/user/logout', methods=['POST'])
 def logout():
     return user.logout(request)
@@ -131,7 +135,7 @@ def set_assignment_status():
 def get_assignments():
     return assignments.get_assignments(request)
 
-@app.route("/api/assignments/add_submission", methods=["POST"])
+@app.route("/api/assignments/add_submission", methods=["PATCH"])
 def add_submission():
     return assignments.add_submission(request)
 
