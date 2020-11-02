@@ -1,143 +1,140 @@
-# Thirdparty
-from flask import Flask, send_from_directory
-from flask import request
-from datetime import timedelta
-from flask_cors import *
-from flask_jwt_extended import create_access_token
-import jwt
-import pprint
+from Flabstraction.connect import app, jwt, fcfg
+from flask import request, jsonify, abort
+from flask_jwt_extended import jwt_required
 
-# Application
-from connect import app
-from User import *
-from Abscences import *
-from Subjects import *
-from Classes import *
-from Grades import *
-from Assignments import *
+from routes.User import User, UserImages, UserAuth, UserTypes, Genders
+from routes.Subjects import Subjects, SubjectGroups, EnrolledSubjects, SubjectEnteries
+from routes.Grades import Grades
+from routes.Abscences import Abscences, AbscenceStatuses
+from routes.Classes import Classes, ClassEnrollments, Areas
+from routes.Assignments import Assignments, AssignmentEntries
 
-user = User()
-abscences = Abscences()
+
+# ==================================================================================== #
+
+users = User()
+images = UserImages()
+auth = UserAuth()
+usertypes = UserTypes()
+genders = Genders()
+
+@app.route('/api/user/login', methods=["POST"])
+def user_login():
+    return auth.login(request)
+
+@app.route('/api/user/verify', methods=["GET"])
+def user_verify():
+    return auth.verify(request)
+
+@app.route('/api/user/users', methods=["POST", "GET", "PUT", "DELETE"])
+def user_route():
+    return fcfg.create_routes(request, users)
+
+@app.route('/api/user/images', methods=["POST", "GET", "PUT", "DELETE"])
+def images_route():
+    return fcfg.create_routes(request, images)
+
+@app.route('/api/user/types', methods=["POST", "GET", "PUT", "DELETE"])
+def types_route():
+    return fcfg.create_routes(request, usertypes)
+
+@app.route('/api/user/genders', methods=["POST", "GET", "PUT", "DELETE"])
+def genders_route():
+    return fcfg.create_routes(request, genders)
+
+# ==================================================================================== #
+
+
+# ==================================================================================== #
+
 subjects = Subjects()
-classes = Classes()
+groups = SubjectGroups()
+enrolls = EnrolledSubjects()
+enteries = SubjectEnteries()
+
+@app.route('/api/subject/subjects', methods=["POST", "GET", "PUT", "DELETE"])
+def subjects_route():
+    return fcfg.create_routes(request, subjects)
+
+@app.route('/api/subject/groups', methods=["POST", "GET", "PUT", "DELETE"])
+def subject_groups_route():
+    return fcfg.create_routes(request, groups)
+
+@app.route('/api/subject/enrolls', methods=["POST", "GET", "PUT", "DELETE"])
+def subject_enrolls_route():
+    return fcfg.create_routes(request, enrolls)
+
+@app.route('/api/subject/enteries', methods=["POST", "GET", "PUT", "DELETE"])
+def subject_enteries_route():
+    return fcfg.create_routes(request, enteries)
+    
+
+# ==================================================================================== #
+
+
+# ==================================================================================== #
+
 grades = Grades()
+
+@app.route('/api/grade/grades', methods=["POST", "GET", "PUT", "DELETE"])
+def grades_routes():
+    return fcfg.create_routes(request, grades)
+
+# ==================================================================================== #
+
+
+# ==================================================================================== #
+
+abscences = Abscences()
+abscencestatuses = AbscenceStatuses()
+
+@app.route('/api/abscence/abscences', methods=["POST", "GET", "PUT", "DELETE"])
+def abscences_routes():
+    return fcfg.create_routes(request, abscences)
+
+@app.route('/api/abscence/statuses', methods=["POST", "GET", "PUT", "DELETE"])
+def abscence_statuses_routes():
+    return fcfg.create_routes(request, abscencestatuses)
+
+# ==================================================================================== #
+
+
+# ==================================================================================== #
+
 assignments = Assignments()
+assignmententries = AssignmentEntries()
 
-@app.route('/api/user/login', methods=['POST'])
-def login():
-    return user.login(request)
+@app.route('/api/assignment/assignments', methods=["POST", "GET", "PUT", "DELETE"])
+def assignments_routes():
+    return fcfg.create_routes(request, assignments)
 
-@app.route('/public/user/profile/<path:filename>', methods=['GET'])
-def test(filename):
-    return send_from_directory("./public/profile_pictures/", filename, as_attachment=True)
+@app.route('/api/assignment/enteries', methods=["POST", "GET", "PUT", "DELETE"])
+def assignment_entries_routes():
+    return fcfg.create_routes(request, assignmententries)
 
-@app.route('/public/assignments/<path:filename>')
-def file(filename):
-    return send_from_directory("./public/assignments/", filename, as_attachment=True)
+# ==================================================================================== #
 
-@app.route('/api/user/logout', methods=['POST'])
-def logout():
-    return user.logout(request)
 
-@app.route('/api/user/update_image', methods=['PATCH'])
-def update_image():
-    return user.update_image(request)
+# ==================================================================================== #
 
-@app.route('/api/user/register', methods=['POST'])
-def register():
-    return user.register(request)
+classes = Classes()
+classenrollments = ClassEnrollments()
+areas = Areas()
 
-@app.route('/api/user/validate_email', methods=['GET'])
-def validate_email():
-    return user.validate_email(request)
+@app.route('/api/class/classes', methods=["POST", "GET", "PUT", "DELETE"])
+def classes_routes():
+    return fcfg.create_routes(request, classes)
 
-@app.route('/api/user/get_all_users', methods=['POST'])
-def get_all_users():
-    return user.get_all_users(request)
+@app.route('/api/class/enrollments', methods=["POST", "GET", "PUT", "DELETE"])
+def class_enrollment_routes():
+    return fcfg.create_routes(request, classenrollments)
 
-@app.route("/api/abscences/register_rfid_present_status", methods=['POST'])
-def register_rfid_present_status():
-    return abscences.register_rfid_present_status(request)
+@app.route('/api/class/areas', methods=["POST", "GET", "PUT", "DELETE"])
+def class_areas_routes():
+    return fcfg.create_routes(request, areas)
 
-@app.route("/api/abscences/add_abscences", methods=["POST"])
-def add_abscences():
-    return abscences.add_abscences(request)
+# ==================================================================================== #
 
-@app.route("/api/abscences/set_abscences_status", methods=["POST"])
-def set_abscences_status():
-    return abscences.set_abscences_status(request)
-
-@app.route("/api/abscences/get_abscences", methods=['POST'])
-def get_abscences():
-    return abscences.get_abscences(request)
-
-@app.route("/api/subjects/create_subject", methods=["POST"])
-def create_subject():
-    return subjects.create_subject(request)
-
-@app.route("/api/subjects/enroll_subject", methods=["POST"])
-def enroll_subject():
-    return subjects.enroll_subject(request)
-
-@app.route('/api/subjects/get_subject', methods=['GET'])
-def get_subject():
-    return subjects.get_subject(request)
-
-@app.route('/api/subjects/get_all_subjects', methods=['GET'])
-def get_all_subjects():
-    return subjects.get_all_subjects(request)
-
-@app.route('/api/subjects/get_enrolled_subjects', methods=['GET'])
-def get_enrolled_subjects():
-    return subjects.get_enrolled_subjects(request)
-
-@app.route("/api/subjects/get_subject_classes", methods=["POST"])
-def get_subject_classes():
-    return subjects.get_subject_classes(request)
-
-@app.route("/api/classes/get_class", methods=["POST"])
-def get_class():
-    return classes.get_class(request)
-
-@app.route("/api/classes/get_homeroom_classes", methods=["POST"])
-def get_homeroom_classes():
-    return classes.get_homeroom_classes(request)
-
-@app.route("/api/classes/create_class", methods=["POST"])
-def create_class():
-    return classes.create_class(request)
-
-@app.route("/api/classes/enroll_class", methods=["POST"])
-def enroll_class():
-    return classes.enroll_class(request)
-
-@app.route("/api/grades/get_student_grades", methods=["POST"])
-def get_student_grades():
-    return grades.get_student_grades(request)
-
-@app.route("/api/grades/get_subject_grades", methods=["GET"])
-def get_subject_grades():
-    return grades.get_subject_grades(request)
-
-@app.route("/api/grades/set_grade", methods=["POST"])
-def set_grade():
-    return grades.set_grade(request)
-
-@app.route("/api/assignments/create_assignments", methods=["POST"])
-def create_assignments():
-    return assignments.create_assignments(request)
-
-@app.route("/api/assignments/set_assignment_status", methods=["POST"])
-def set_assignment_status():
-    return assignments.set_assignment_status(request)
-
-@app.route("/api/assignments/get_assignments", methods=["GET"])
-def get_assignments():
-    return assignments.get_assignments(request)
-
-@app.route("/api/assignments/add_submission", methods=["PATCH"])
-def add_submission():
-    return assignments.add_submission(request)
 
 if __name__ == "__main__":
-      app.run(debug=True)
+    app.run("0.0.0.0", "5000", True)
